@@ -26,3 +26,7 @@ compliance of models from various ML/DL libraries (such as Keras and scikit-lear
 .. autoclass:: deel.puncc.regression.EnbPI
 
 .. autoclass:: deel.puncc.regression.AdaptiveEnbPI
+
+For multi-output problems whose outputs are correlated, joint (ellipsoidal)
+prediction sets and exact bounds on linear metrics are presented on the
+:doc:`joint regression <joint>` page.

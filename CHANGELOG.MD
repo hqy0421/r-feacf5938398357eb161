@@ -4,6 +4,26 @@ This file documents main changes across releases of **PUNCC**.
 
 ---
 
+## [Unreleased]
+
+### Added
+- Joint (ellipsoidal) conformal prediction for multi-output regression in the new module `deel.puncc.joint` (implementation in `deel.puncc.api.joint`):
+  - `JointCalibrator`: joint calibration for a fixed predictor given an independent calibration set and a full-column-rank matrix `L`. The nonconformity score is the norm of the residual's coordinates in the column space of `L`; residuals outside that space score `+inf`. The radius is obtained with puncc's native corrected quantile (shared with the other calibrators).
+  - `JointCP`: end-to-end wrapper producing genuine point predictions and the joint prediction set `{ŷ + Lz : ‖z‖₂ ≤ q}` for new inputs.
+  - `JointEllipsoid` (aliases `EllipsoidalSet`, `Ellipsoid`, `JointPredictionSet`, `JointSet`): the prediction set, preserving the radius and the mapping, with `contains`/`in` membership queries and uniform `sample`.
+  - `linear_functional_bounds` and `JointEllipsoid.linear_bounds`: tight exact lower/upper bounds on `A y + b` over the joint set (`aᵀc + b ± q‖Lᵀa‖₂`), computed from the joint set rather than by assembling per-dimension interval boxes.
+  - `column_space_norm`, `column_space_coordinates` and `column_space_norm_builder` score helpers.
+- Support for low-dimensional column spaces (`rank(L) < n_outputs`), including `rank(L) = 1`.
+- When the radius is infinite the joint set is the whole output space: membership always holds, non-constant linear queries return `±inf`, and constant queries (`A = 0`) still return finite bounds.
+
+### Changed
+- Explicit `ValueError`/`RuntimeError` reporting for invalid dimensions, non-full-column-rank `L`, insufficient calibration samples, and predictor failures.
+
+### Notes
+- The existing conformal regression, classification, detection and calibration interfaces are unchanged.
+
+---
+
 ## [0.9.3] - 2026-06-23
 
 ### Changed
